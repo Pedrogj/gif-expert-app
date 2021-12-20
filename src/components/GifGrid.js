@@ -1,16 +1,17 @@
 import React, {useState, useEffect} from "react";
+import GifGridItem from "./GifGridItem";
 
 const GifGrid = ({ category }) => {
-  
-  const [state, setState] = useState(0);
+
+  const [images, setImages] = useState([]);
   
   useEffect(() => {
     getGifs();
   }, []);
 
   const getGifs = async () => {
-    const url =
-      "https://api.giphy.com/v1/gifs/search?q=Rick+and+Morty&limit=10&api_key=DN0MXFyoDuvrLtEsfHa7rB90fcIMauES";
+
+    const url ="https://api.giphy.com/v1/gifs/search?q=Rick+and+Morty&limit=10&api_key=DN0MXFyoDuvrLtEsfHa7rB90fcIMauES";
     const resp = await fetch(url);
     const { data } = await resp.json();
 
@@ -23,13 +24,20 @@ const GifGrid = ({ category }) => {
     });
 
     console.log(gifs);
+    setImages(gifs);
   };
 
   return (
     <div>
-      <h3>{state}</h3>
       <h3>{category}</h3>
-      <button onClick={() => setState( state + 1)}></button>
+        {
+          images.map( img => (
+            <GifGridItem 
+              key={img.id} 
+              {...img} 
+            />
+          ))
+        }
     </div>
   );
 };
